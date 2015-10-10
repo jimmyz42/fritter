@@ -1,39 +1,79 @@
 var assert = require("assert");
+var tweet_list = require("../model/db");
 
-// Array is the module under test.
-describe('Array', function() {
-  // indexOf is the method under test.
-  describe('#indexOf()', function () {
+// Test the tweet_list database model
+describe('tweet_list', function() {
+  var tweet1 = {author: 'a', text: '1'};
+  var tweet2 = {author: 'b', text: '2'};
+  var tweet3 = {author: 'c', text: '3'};
+  var tweet4 = {author: 'd', text: '4'};  
+  var tweet5 = {author: 'a', text: '5'};  
+
+  // Test the database's add method, adding tweets.
+  describe('#add', function () {
     
-    // This is a test, we indicate what we're testing for.
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
+    // Test adding a single tweet to the list.
+    it('should add single tweet to end correctly', function () {
+      tweet_list.add(tweet1);
+      assert.deepEqual([tweet1], tweet_list.getTweets());
     });
 
 
-    // Another test.
-    it('should find values that exist', function() {
-      assert.equal(0, [1, 2, 3].indexOf(1));
-      assert.equal(2, [1, 2, 3].indexOf(3));
+    // Test adding multiple tweets to the list.
+    it('should add multiple tweets to end correctly', function() {
+      tweet_list.add(tweet2);
+      tweet_list.add(tweet3);
+      tweet_list.add(tweet4);
+      tweet_list.add(tweet5);
+      assert.deepEqual([tweet1, tweet2, tweet3, tweet4, tweet5], tweet_list.getTweets());
     });
 
-  }); // End describe indexOf.
+  });
 
-  // map is the method under test.
-  describe('#map', function() {
+  // Test the database's remove method, removing tweets.
+  describe('#remove', function() {
     
-    // This is a test.
-    it('should map values given a function', function() {
-      assert.deepEqual([2, 4, 6], [1, 2, 3].map(function(x) { return 2 * x; }));
+    // Test removing a tweet from the end.
+    it('should remove tweets from end correctly', function() {
+	  tweet_list.remove(3);
+      assert.deepEqual([tweet1, tweet2, tweet3, tweet5], tweet_list.getTweets());
     });
 
 
-    // Another test.
-    it('should work on empty arrays', function() {
-      assert.deepEqual([], [].map(function(x) { return 2 * x; }));
+    // Test removing a tweet from the middle.
+    it('should remove tweets from middle correctly', function() {
+	  tweet_list.remove(1);
+      assert.deepEqual([tweet1, tweet3, tweet5], tweet_list.getTweets());
     });
 
-  }); // End describe map.
+  });
 
-}); // End describe Array.
+  // Test the database's getTweets method.
+  describe('#getTweets', function() {
+    
+    // Get all tweets
+    it('should get all tweets correctly', function() {
+      assert.deepEqual([tweet1, tweet3, tweet5], tweet_list.getTweets());
+    });
+
+
+    // Get tweets from single author, 0 results
+    it('should get tweets from author correctly when there are 0 results', function() {
+      assert.deepEqual([], tweet_list.getTweets('b'));
+    });
+
+
+    // Get tweets from single author, 1 result
+    it('should get tweets from author correctly when there is 1 result', function() {
+      assert.deepEqual([tweet3], tweet_list.getTweets('c'));
+    });
+
+
+    // Get tweets from single author, 2 results
+    it('should get tweets from autho correctly when there are 2 results', function() {
+      assert.deepEqual([tweet1, tweet5], tweet_list.getTweets('a'));
+    });
+
+  }); 
+
+}); 
