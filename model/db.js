@@ -31,7 +31,16 @@ exports.remove = function(index) {
 	};
 
 // Function to get the list of tweets
+// @param user Get only tweets of this specific user
+// If user === undefined, returns all tweets
 // @return The list of tweet objects
-exports.getTweets = function() {
-	return tweets;
+exports.getTweets = function(user) {
+	if(user === undefined) {
+		return tweets;
+		}
+	else {
+		return tweets.filter(function(tweet) {
+			return tweet.author === user;
+			});
+		}
 	};

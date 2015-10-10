@@ -4,7 +4,9 @@
 			<button class="x-button" type="button" value="<%= i %>">X</button>
 		<% } %>
 		<br>
-		<i>@<%= tweets[i].author %> posted:</i>
+		<i>
+			<a href="/users/<%= tweets[i].author %>">@<%= tweets[i].author %></a> posted:
+		</i>
 		<br>
 		<%= tweets[i].text %>
 	</div>
