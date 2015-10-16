@@ -1,22 +1,43 @@
 /* Routing script to handle GET and POST requests */
 
 var express = require('express');
-var tweet_list = require('../model/db.js');
+var tweet_model = require('../model/tweet_model');
+var user_model = require('../model/user_model');
 var router = express.Router();
 
-/* GET home page. */
+/* GET home page with all tweets. */
 router.get('/', function(req, res, next) {
-	res.render('index', {
+	tweet_model.getTweets(undefined, function(tweets) {
+		res.render('feed', {
+			title: 'Fritter',
+			titleText: 'Fritter',
+			subtitleText: 'The social messaging site that Fritters your time away!',
+			username: req.session.username,
+			tweets: tweets
+		});
+	});
+});
+
+/* GET sign in page */
+router.get('/login', function(req, res, next) {
+	res.render('login', {
 		title: 'Fritter',
-		username: req.session.username,
-		tweets: tweet_list.getTweets()
+		username: req.session.username
 	});
 });
 
 /* POST sign in */
 router.post('/login', function(req, res, next) {
-	req.session.username = req.body.username;
-	res.end('success');
+	user_model.auth(req.body.username, req.body.password, function(okay) {
+		if(okay) {
+			req.session.username = req.body.username;
+			res.end('success');
+			}
+		else {
+			res.status(401);
+			res.end('error');
+			}
+	});
 });
 
 /* POST sign out */
@@ -25,26 +46,5 @@ router.post('/logout', function(req, res, next) {
 	res.end('success');
 });
 
-/* POST add new tweet. */
-router.post('/tweets/add', function(req, res, next) {
-	var tweet = {author: req.session.username, text: req.body.tweet};
-	if(tweet_list.add(tweet)) {
-		res.end('success');
-		}
-	else {
-		res.end('error');
-		}
-});
-
-/* POST delete tweet. */
-router.post('/tweets/delete', function(req, res, next) {
-	var index = Number(req.body.index);
-	if(tweet_list.remove(index)) {
-		res.end('success');
-		}
-	else {
-		res.end('error');
-		}
-});
-
 module.exports = router;
+

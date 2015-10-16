@@ -8,6 +8,17 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var tweets = require('./routes/tweets');
+var account = require('./routes/account');
+
+// mongodb
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/fritter');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+    console.log("database connected");
+});
 
 var app = express();
 
@@ -24,13 +35,29 @@ app.use(cookieParser());
 app.use(session({secret:"359387230975", resave:true, saveUninitialized:true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// if not logged in, redirect to login page
+app.use(function(req, res, next) {
+	if(req.session.username === undefined && req.path !== '/login' && req.path !== '/account/create') {
+		req.method = 'get';
+		req.url = '/login';
+		}
+	next();
+});
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/tweets', tweets);
+app.use('/account', account);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
+  res.render('notfound', {
+	title: 'Fritter',
+	username: req.session.username,
+	item: 'page'
+  });
   next(err);
 });
 

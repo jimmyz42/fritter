@@ -1,0 +1,20 @@
+<% if(type === 'following') {%>
+	<h1>You are following <%= follow.length %>
+	<% if(follow.length==1) { %> person <% } else { %> people <% } %>
+	on <%= title %>.</h1>
+<% } else { %>
+	<h1>You have <%= follow.length %> follower<% if(follow.length != 1) { %>s<% } %> on <%= title %>.</h1>
+<% } %>
+
+<table>
+	<% for(var i=0; i<follow.length; i++) { %>
+		<tr>
+			<td><a href="/users/<%= follow[i] %>"><%= follow[i] %></a></td>
+			<% if(following.indexOf(follow[i]) === -1) { %>
+				<td><button class="follow-button" type="button" value="<%= follow[i] %>">Follow</button></td>
+			<% } else { %>
+				<td><button class="unfollow-button" type="button" value="<%= follow[i] %>">Unfollow</button></td>
+			<% } %>
+		</tr>
+	<% } %>
+</table>

@@ -6,10 +6,34 @@ html {
 
 body {
 	padding: 50px;
+	padding-top: 100px;
 }
 
-.login {
-	text-align: right;
+.navbar {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	background: linear-gradient(to top, #0000CC, #0099FF);
+}
+
+#navtabs {
+	float: right;
+}
+
+#navtabs td {
+	width: 15%;
+	color: white;
+}
+
+#navtabs a {
+	font: 15pt arial;
+	text-align: center;
+	color: white;
+}
+
+#navtabs a:hover {
+	text-shadow: 2px 2px 4px;
 }
 
 #tweet-box {
@@ -18,12 +42,25 @@ body {
 	font-size: 12pt;
 }
 
+.round-box {
+	width: 50%;
+	margin: auto;
+	word-wrap: break-word;
+	box-shadow: 10px 10px 5px #888888;
+	padding: 10px;
+	background-color: white;
+	border-radius: 15px;
+}
+
+/* customization for tweets, mostly use round-box, else delete */
 .tweet {
 	width: 50%;
 	margin: auto;
 	word-wrap: break-word;
 	box-shadow: 10px 10px 5px #888888;
 	padding: 10px;
+	background-color: white;
+	border-radius: 15px;
 }
 
 .x-button {

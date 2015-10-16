@@ -1,13 +1,22 @@
-<% for(var i=0; i<tweets.length; i++) { %>
-	<div class="tweet">
+<% for(var i=tweets.length-1; i>=0; i--) { %>
+	<br>
+	<div class="round-box tweet">
 		<% if(username === tweets[i].author) { %>
-			<button class="x-button" type="button" value="<%= i %>">X</button>
+			<button class="x-button" type="button" value="<%= tweets[i]._id %>">X</button>
 		<% } %>
-		<br>
 		<i>
-			<a href="/users/<%= tweets[i].author %>">@<%= tweets[i].author %></a> posted:
+			<a href="/users/<%= tweets[i].author %>">@<%= tweets[i].author %></a>
+			<% if(tweets[i].retweet_from === undefined) { %>
+				posted:
+			<% } else { %>
+				refreeted from <a href="/users/<%= tweets[i].retweet_from %>">@<%= tweets[i].retweet_from %></a>:
+			<% } %>
 		</i>
-		<br>
+		<br><br>
 		<%= tweets[i].text %>
+		<br>
+		<button class="retweet-button" type="button">Refreet!</button>
+		<input type="hidden" name="author" value="<%= tweets[i].author %>" />
+		<input type="hidden" name="text" value="<%= tweets[i].text %>" />
 	</div>
 <% } %>

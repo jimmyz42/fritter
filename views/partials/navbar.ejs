@@ -1,0 +1,15 @@
+<div class="navbar">
+	<a href="/"><img src = "/images/<%= title %>.png" /></a>
+	
+	<% if(username) { %>
+		<table id="navtabs"><tr>
+			<td><a href="/tweets/">My Feed</a></td>
+			<td><a href="/users/<%= username %>">My Freets</a></td>
+			<td><a href="/account/followers">Followers</a></td>
+			<td><a href="/account/following">Following</a></td>
+			<td><a href="/account/">Profile</a></td>
+			<td><i><%= username %></i><br>
+			<button id="logout-submit" type="button">Sign Out</button></td>
+		</tr></table>
+	<% } %>
+</div>

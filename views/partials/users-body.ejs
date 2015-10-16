@@ -1,2 +1,16 @@
-<h1><a href="/"><%= title %></a></h1>
-<p><%= user %>'s tweets</p>
+<h1>Welcome to 
+	<% if(username === user) { %>Your<% } else { %><%= name || user %>'s<% } %>
+<%= title %> Profile!</h1>
+<% if(about && username !== user) { %>
+	<p><%= about %></p>
+<% } %>
+<% if(username === user) { %>
+	<textarea id="tweet-box"></textarea>
+	<br>
+	<button id="tweet-submit" type="button">Freet!</button>
+<% } else if(following) { %>
+	<button class="unfollow-button" type="button" value="<%= user %>">Unfollow <%= user %></button>
+<% } else { %>
+	<button class="follow-button" type="button" value="<%= user %>">Follow <%= user %>!</button>
+<% } %>
+
