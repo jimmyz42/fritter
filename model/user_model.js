@@ -14,7 +14,9 @@ var userSchema = mongoose.Schema({
 
 var userModel = mongoose.model("User", userSchema);
 
-// TODO comment
+// Function to check if a username exists
+// @param username Username to be checked
+// @return True if username already exists, False otherwise
 exports.usernameExists = function(username, callback) {
 	userModel.find({username: username}, function(err, users) {
 		if(err) console.log(err);
@@ -22,14 +24,25 @@ exports.usernameExists = function(username, callback) {
 		});
 	};
 
+// Function to check if a username is okay
+// @param username Username to be checked
+// @return True if username is 1-16 characters only containing numbers,
+// letters, and underscore, False otherwise
 exports.usernameOkay = function(username) {
 	return typeof(username) === 'string' && /^\w{1,16}$/.test(username);
 	};
 
+// Function to check if a password is okay
+// @param password Password to be checked
+// @return True if password is at least 8 characters, False otherwise
 exports.passwordOkay = function(password) {
 	return typeof(password) === 'string' && password.length >= 8;
 	};
 
+// Function to check logins
+// @param username Username of user
+// @param password Password of user
+// @return True if the username and password match, False otherwise
 exports.auth = function(username, password, callback) {
 	userModel.find({username: username}, function(err, users) {
 		if(err) console.log(err);
@@ -42,6 +55,10 @@ exports.auth = function(username, password, callback) {
 		});
 	};
 
+// Adds a user to the database
+// @param username Username of the user
+// @param password Password of the user
+// @return The user added
 exports.add = function(username, password, callback) {
 	//if(!callback) callback = function(){};
 	userModel.create({
@@ -57,11 +74,9 @@ exports.add = function(username, password, callback) {
 		});
 	};
 
-exports.remove = function(username, callback) {
-	// very annoying to implement
-	// would need to remove user, from followers, from following, from tweets, from retweets
-	};
-
+// Gets a user from the database
+// @param username Username of the user
+// @return the User object
 exports.getUser = function(username, callback) {
 	userModel.find({ username: username }, function(err, users) {
 		if(err) console.log(err);
@@ -69,9 +84,12 @@ exports.getUser = function(username, callback) {
 	});
 };
 
+// Lets a user follow another user
+// @param follower Person who is following someone
+// @param followed Person who is being followed
+// @return none
 exports.follow = function(follower, followed, callback) {
 	userModel.update({ username: follower }, { $addToSet: { following: followed } }, function(err, data) {
-		console.log(data);
 		if(err) console.log(err);
 		userModel.update({ username: followed }, { $addToSet: { followers: follower } }, function(err, data) {
 			console.log(data);
@@ -81,6 +99,10 @@ exports.follow = function(follower, followed, callback) {
 	});
 };
 
+// Lets a user unfollow another user
+// @param follower Person who is unfollowing someone
+// @param followed Person who is being unfollowed
+// @return none
 exports.unfollow = function(follower, followed, callback) {
 	userModel.update({ username: follower }, { $pull: { following: followed } }, function(err, data) {
 		if(err) console.log(err);
@@ -91,6 +113,10 @@ exports.unfollow = function(follower, followed, callback) {
 	});
 };
 
+// Sets the display name of a user
+// @param username Username of the user
+// @param name Display name to be set
+// @return none
 exports.setName = function(username, name, callback) {
 	userModel.update({ username: username }, { name: name }, function(err, data) {
 		if(err) console.log(err);
@@ -98,6 +124,10 @@ exports.setName = function(username, name, callback) {
 	});
 };
 
+// Sets the about me text of a user
+// @param username Username of the user
+// @param about About me text to be set
+// @return none
 exports.setAbout = function(username, about, callback) {
 	userModel.update({ username: username }, { about: about }, function(err, data) {
 		if(err) console.log(err);
@@ -105,6 +135,10 @@ exports.setAbout = function(username, about, callback) {
 	});
 };
 
+// Sets the password of a user
+// @param username Username of the user
+// @param password Password to be set
+// @return none
 exports.setPassword = function(username, password, callback) {
 	userModel.update({ username: username }, { password: password }, function(err, data) {
 		if(err) console.log(err);

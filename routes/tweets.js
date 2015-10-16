@@ -25,7 +25,7 @@ router.post('/add', function(req, res, next) {
     tweet_model.add(req.session.username, req.body.tweet, undefined, function(okay) {
         if(okay) res.end('success');
         else {
-            res.status(500);
+            res.status(400);
             res.end('error');
             }
     });
@@ -33,7 +33,7 @@ router.post('/add', function(req, res, next) {
 
 /* POST delete tweet. */
 router.post('/delete', function(req, res, next) {
-    tweet_model.remove(req.body.id, function(okay) {
+	tweet_model.remove(req.body.id, function(okay) {
         if(okay) res.end('success');
         else {
             res.status(500);
@@ -45,6 +45,30 @@ router.post('/delete', function(req, res, next) {
 /* POST retweet tweet. */
 router.post('/retweet', function(req, res, next) {
     tweet_model.add(req.session.username, req.body.tweet, req.body.retweet_from, function(okay) {
+        if(okay) res.end('success');
+        else {
+            res.status(500);
+            res.end('error');
+            }
+    });
+});
+
+// NOTE: It is intentional that you can like/unlike your own tweets.
+
+/* POST like tweet */
+router.post('/like', function(req, res, next) {
+	tweet_model.like(req.session.username, req.body.id, function(okay) {
+        if(okay) res.end('success');
+        else {
+            res.status(500);
+            res.end('error');
+            }
+    });
+});
+
+/* POST unlike tweet */
+router.post('/unlike', function(req, res, next) {
+	tweet_model.unlike(req.session.username, req.body.id, function(okay) {
         if(okay) res.end('success');
         else {
             res.status(500);

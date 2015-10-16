@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 var tweetSchema = mongoose.Schema({
 	author: String,
 	text: String,
-	retweet_from: String
+	retweet_from: String,
+	likes: [String]
 });
 
 var tweetModel = mongoose.model("Tweet", tweetSchema);
@@ -16,13 +17,12 @@ var tweetModel = mongoose.model("Tweet", tweetSchema);
 // Tweet object must contain string "author" and "text" fields, with text between 1 and 140 characters
 // @return true if tweet was valid and added, false otherwise
 exports.add = function(author, text, retweet_from, callback) {
-	console.log("exports.add");
 	if(typeof(author) === 'string' && typeof(text) === 'string' && text.length > 0 && text.length <= 140) {
-		console.log("create tweet");
 		tweetModel.create({
 			author: author,
 			text: text,
-			retweet_from: retweet_from
+			retweet_from: retweet_from,
+			likes: []
 		}, function(err, tweets) {
 			if(err) {
 				callback(false);
@@ -73,10 +73,47 @@ exports.getTweets = function(user, callback) {
 		}
 	else {
 		tweetModel.find({author: user}, function(err, tweets) {
-			console.log("author = "+user);
-			console.log(tweets);
 			if(err) console.log(err);
 			callback(tweets);
 			});
 		}
 	};
+
+// Function to like a tweet
+// @param username User that liked the tweet
+// @param tweet_id ID of the tweet that was liked
+// @return none
+exports.like = function(username, tweet_id, callback) {
+	tweetModel.update({ _id: tweet_id }, { $addToSet: { likes: username } }, function(err, data) {
+		if(err) {
+			console.log(err);
+			callback(false);
+			}
+		else callback(true);
+	});
+};
+
+// Function to unlike a tweet
+// @param username User that unliked the tweet
+// @param tweet_id ID of the tweet that was unliked
+// @return none
+exports.unlike = function(username, tweet_id, callback) {
+	tweetModel.update({ _id: tweet_id }, { $pull: { likes: username } }, function(err, data) {
+		if(err) {
+			console.log(err);
+			callback(false);
+			}
+		else callback(true);
+	});
+};
+
+
+
+
+
+
+
+
+
+
+

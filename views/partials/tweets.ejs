@@ -2,7 +2,7 @@
 	<br>
 	<div class="round-box tweet">
 		<% if(username === tweets[i].author) { %>
-			<button class="x-button" type="button" value="<%= tweets[i]._id %>">X</button>
+			<button class="x-button" type="button">X</button>
 		<% } %>
 		<i>
 			<a href="/users/<%= tweets[i].author %>">@<%= tweets[i].author %></a>
@@ -15,8 +15,19 @@
 		<br><br>
 		<%= tweets[i].text %>
 		<br>
-		<button class="retweet-button" type="button">Refreet!</button>
+		<% if(tweets[i].author !== username) { %>
+			<button class="retweet-button" type="button">Refreet!</button>&nbsp;&nbsp;
+		<% } %>
+		<%= tweets[i].likes.length %>
+			<% if(tweets[i].likes.length === 1) { %> person <% } else { %> people <% } %>
+		liked this freet.
+		<% if(tweets[i].likes.indexOf(username) === -1) { %>
+			<b class="like">&hearts;</b> Like
+		<% } else { %>
+			<b class="unlike">&hearts;</b> Unlike
+		<% } %>
 		<input type="hidden" name="author" value="<%= tweets[i].author %>" />
 		<input type="hidden" name="text" value="<%= tweets[i].text %>" />
+		<input type="hidden" name="id" value="<%= tweets[i].id %>" />
 	</div>
 <% } %>

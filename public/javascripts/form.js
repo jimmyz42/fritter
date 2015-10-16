@@ -31,18 +31,15 @@ $(function() {
 		});
 	});
 
-//maybe rework these based on name instead of id??
 	$('#login-submit').click(function() {
 		$.post('/login', {
 			username: $('input[name="username"]').val(),
 			password: $('input[name="password"]').val()
 		}).done(function(data) {
-			if(data === "success") {
-				window.location = '/';
-				}
-			else if(data === "error") {
-				displayError($('input[name="password"]'), 'Incorrect username or password');
-				}
+			window.location = '/';
+		}).fail(function(data) {
+			clearErrors([$('input[name="password"]')]);
+			displayError(true, $('input[name="password"]'), 'Incorrect username or password');
 		});
 	});
 
@@ -55,7 +52,7 @@ $(function() {
 //TWEETS
 	$('.x-button').click(function() {
 		$.post('/tweets/delete', {
-			id: $(this).val()
+			id: $(this).parent().children('input[name="id"]').val()
 		}).done(function() {
 			location.reload(true);
 		});
@@ -65,12 +62,10 @@ $(function() {
 		$.post('/tweets/add', {
 			tweet: $('#tweet-box').val()
 		}).done(function(data) {
-			if(data === "success") {
-				location.reload(true);
-				}
-			else {
-				displayError($('#tweet-box'), 'Freet must be between 1 and 140 characters');
-				}
+			location.reload(true);
+		}).fail(function(data) {
+			clearErrors([$('#tweet-box')]);
+			displayError(true, $('#tweet-box'), 'Freet must be between 1 and 140 characters');
 		});
 	});
 
@@ -78,6 +73,22 @@ $(function() {
 		$.post('/tweets/retweet', {
 			tweet: $(this).parent().children('input[name="text"]').val(),
 			retweet_from: $(this).parent().children('input[name="author"]').val()
+		}).done(function() {
+			location.reload(true);
+		});
+	});
+
+	$('.like').click(function() {
+		$.post('/tweets/like', {
+			id: $(this).parent().children('input[name="id"]').val()
+		}).done(function() {
+			location.reload(true);
+		});
+	});
+
+	$('.unlike').click(function() {
+		$.post('/tweets/unlike', {
+			id: $(this).parent().children('input[name="id"]').val()
 		}).done(function() {
 			location.reload(true);
 		});

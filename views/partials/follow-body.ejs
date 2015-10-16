@@ -6,7 +6,7 @@
 	<h1>You have <%= follow.length %> follower<% if(follow.length != 1) { %>s<% } %> on <%= title %>.</h1>
 <% } %>
 
-<table>
+<table class="follow">
 	<% for(var i=0; i<follow.length; i++) { %>
 		<tr>
 			<td><a href="/users/<%= follow[i] %>"><%= follow[i] %></a></td>

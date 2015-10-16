@@ -9,6 +9,10 @@ body {
 	padding-top: 100px;
 }
 
+table {
+	margin: auto;
+}
+
 .navbar {
 	position: fixed;
 	top: 0px;
@@ -42,9 +46,15 @@ body {
 	font-size: 12pt;
 }
 
-.round-box {
+.follow {
 	width: 50%;
+	font-size: 16pt;
+}
+
+.round-box {
+	width: 350px;
 	margin: auto;
+	text-align: center;
 	word-wrap: break-word;
 	box-shadow: 10px 10px 5px #888888;
 	padding: 10px;
@@ -52,15 +62,9 @@ body {
 	border-radius: 15px;
 }
 
-/* customization for tweets, mostly use round-box, else delete */
 .tweet {
+	text-align: left;
 	width: 50%;
-	margin: auto;
-	word-wrap: break-word;
-	box-shadow: 10px 10px 5px #888888;
-	padding: 10px;
-	background-color: white;
-	border-radius: 15px;
 }
 
 .x-button {
@@ -69,4 +73,12 @@ body {
 
 .error-msg {
 	font-style: italic;
+}
+
+.unlike {
+	color: #FF66FF;
+}
+
+.like:hover, .unlike:hover {
+	text-shadow: 1px 1px 2px;
 }
